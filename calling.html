@@ -58,23 +58,25 @@
                     <div class="col-xl-4 col-xxl-4">
                         <div class="row">
                             <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-end">
-                                <h6 class="d-xxl-flex align-items-xxl-end" style="color: #ffffff;">Жіберушінің аты-жөні</h6>
+                                <h6 class="d-xxl-flex align-items-xxl-end" style="color: #ffffff;">Жіберушінің логині</h6>
                             </div>
-                            <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-center"><input class="shadow" type="text"></div>
+                            <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-center">
+                                <input class="shadow" id="senderlogin" type="text"></div>
                         </div>
                     </div>
                     <div class="col-xl-4 col-xxl-4">
                         <div class="row">
                             <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-end">
-                                <h6 class="d-xxl-flex align-items-xxl-end" style="color: #fff;">Жіберушінің поштасы</h6>
+                                <h6 class="d-xxl-flex align-items-xxl-end" style="color: #fff;">Жіберушінің құпия сөзі</h6>
                             </div>
-                            <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-center"><input class="shadow" type="text"></div>
+                            <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-center">
+                                <input class="shadow" id="senderpass" type="password"></div>
                         </div>
                     </div>
                     <div class="col-xl-4 col-xxl-4 d-xl-flex justify-content-xl-center">
                         <div class="row">
                             <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-end">
-                                <h6 class="d-xxl-flex align-items-xxl-end" style="color: #fff;">Жіберушінің телефоны</h6>
+                                <h6 class="d-xxl-flex align-items-xxl-end" style="color: #fff;">Жіберушінің поштасы</h6>
                             </div>
                             <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-center"><input class="shadow" type="text"></div>
                         </div>
@@ -84,7 +86,8 @@
                             <div class="col-xxl-12 offset-xxl-0 d-xl-flex justify-content-xl-center">
                                 <h6 class="d-xxl-flex align-items-xxl-end" style="color: #fff;">Хат тақырыбы</h6>
                             </div>
-                            <div class="col-xxl-12 d-xl-flex justify-content-xl-center"><input class="shadow d-xxl-flex flex-fill justify-content-xxl-start" type="text"></div>
+                            <div class="col-xxl-12 d-xl-flex justify-content-xl-center">
+                                <input class="shadow d-xxl-flex flex-fill justify-content-xxl-start" id="sendersubject" type="text"></div>
                         </div>
                     </div>
                     <div class="col-xl-12" style="margin-top: 24px;">
@@ -92,11 +95,12 @@
                             <div class="col-xxl-12 offset-xxl-0 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-center align-items-xxl-end">
                                 <h6 class="d-xxl-flex align-items-xxl-end" style="color: #fff;">Хабарлама мәтіні</h6>
                             </div>
-                            <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-start align-items-xxl-center"><textarea class="shadow flex-fill justify-content-center"></textarea></div>
+                            <div class="col-xxl-12 d-xl-flex d-xxl-flex justify-content-xl-center justify-content-xxl-start align-items-xxl-center">
+                                <textarea class="shadow flex-fill justify-content-center" id="textareamail"></textarea></div>
                         </div>
                     </div>
                     <div class="col-xl-12"></div>
-                    <div class="col-xl-12 d-xl-flex d-xxl-flex justify-content-xl-end justify-content-xxl-end" style="margin-top: 24px;"><button class="btn btn-primary" type="button" style="background: #0D1B2A;border-color: #415A77;">Хабарлама жіберу</button></div>
+                    <div class="col-xl-12 d-xl-flex d-xxl-flex justify-content-xl-end justify-content-xxl-end" style="margin-top: 24px;"><button class="btn btn-primary" type="button" style="background: #0D1B2A;border-color: #415A77;" onclick="sendEmail()">  Хабарлама жіберу</button></div>
                 </div>
             </div>
         </div>
@@ -146,7 +150,31 @@
             </div>
         </div>
     </footer>
+   
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script>
+      function sendEmail() {
+        if (document.getElementById('senderlogin').value == '' &&
+          document.getElementById('mainpagepass').value == '') {
+          window.alert('Логин немесе Пароль қате терілген немесе терілмеген!')
+        } else {
+          Email.send({
+            Host: "smtp.gmail.com",
+            Username: document.getElementById('senderlogin').value,
+            Password: document.getElementById('senderpass').value,
+            To: 'aiko-09.99@bk.ru',
+            From: document.getElementById('senderlogin').value,
+            Subject: document.getElementById('sendersubject').value,
+            Body: document.getElementById('textareamail').value,
+          }).then(
+            message => alert(`Хабарлама 'aiko-09.99@bk.ru' қолданушысына сәтті жіберілді!`)
+          );
+        }
+        console.log(document.getElementById('senderlogin').value);
+      }
+    </script>
 </body>
 
 </html>
